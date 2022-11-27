@@ -1,0 +1,46 @@
+From 474c6ae46252d44a9f1138c979696316883f8e30 Mon Sep 17 00:00:00 2001
+From: Chris Brannon <chris@the-brannons.com>
+Date: Wed, 6 Jan 2021 10:29:46 -0800
+Subject: [PATCH] Fix build failure due to OpenAL API change.
+
+I believe this commit is also backward compatible with older versions
+of OpenAL.
+---
+ openal/alcCore.go | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/openal/alcCore.go b/openal/alcCore.go
+index 519c1c9..82f4d83 100644
+--- a/openal/alcCore.go
++++ b/openal/alcCore.go
+@@ -111,7 +111,7 @@ type Device struct {
+ }
+ 
+ func (self *Device) getError() uint32 {
+-	return uint32(C.alcGetError((*C.struct_ALCdevice_struct)(unsafe.Pointer(self.handle))))
++	return uint32(C.alcGetError((*C.ALCdevice)(unsafe.Pointer(self.handle))))
+ }
+ 
+ // Err() returns the most recent error generated
+@@ -147,8 +147,8 @@ func OpenDevice(name string) *Device {
+ 	return &Device{uintptr((unsafe.Pointer)(h))}
+ }
+ 
+-func (self *Device) cHandle() *C.struct_ALCdevice_struct {
+-	return (*C.struct_ALCdevice_struct)(unsafe.Pointer(self.handle))
++func (self *Device) cHandle() *C.ALCdevice {
++	return (*C.ALCdevice)(unsafe.Pointer(self.handle))
+ }
+ 
+ func (self *Device) CloseDevice() bool {
+@@ -268,8 +268,8 @@ type Context struct {
+ // details).
+ var NullContext Context
+ 
+-func (self *Context) cHandle() *C.struct_ALCcontext_struct {
+-	return (*C.struct_ALCcontext_struct)(unsafe.Pointer(self.handle))
++func (self *Context) cHandle() *C.ALCcontext {
++	return (*C.ALCcontext)(unsafe.Pointer(self.handle))
+ }
+ 
+ // Renamed, was MakeContextCurrent.
