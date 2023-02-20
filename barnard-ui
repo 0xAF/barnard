@@ -97,7 +97,7 @@ menulist() {
 if [[ ! -r ~/.config/barnard/servers.conf ]]; then
     echo "Adding default mumble server." | log
     echo "declare -Ag mumbleServerList=(" >  ~/.config/barnard/servers.conf
-    echo "[F123Light]=\"mumble.f123.org:64738\"" >> ~/.config/barnard/servers.conf
+    echo "[Slint]=\"slint.fr:64738 -insecure\"" >> ~/.config/barnard/servers.conf
     echo ")" >> ~/.config/barnard/servers.conf
 fi
 source ~/.config/barnard/servers.conf
