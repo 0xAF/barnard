@@ -1,5 +1,10 @@
 # Barnard
 
+The original maintainer has become unresponsive. There are pull requests and other interactions that have not been responded to in a few years. So at this point, the worst has to be assumed, that's right, real life got in the way of project development!
+
+So, I hope to make this fork the officially supported version, until someone else wants to take over. I am not a go programmer, but I do use barnard almost daily. So if you have some changes, please create a pull request.
+
+
 ## Documentation
 
 Please feel free to give suggestions and corrections for this file (as wellas Barnard propper).
