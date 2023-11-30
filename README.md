@@ -1,5 +1,10 @@
 # Barnard
 
+**0xAF**: I've added Voice Start/Stop events, to be passed to the notify.sh script.  
+I need these events, so I can start and stop transmitting (PTT button) on my HAN radio.  
+I'm in no way a GO developer, so it is what it is.
+
+
 The original maintainer has become unresponsive. There are pull requests and other interactions that have not been responded to in a few years. So at this point, the worst has to be assumed, that's right, real life got in the way of project development!
 
 So, I hope to make this fork the officially supported version, until someone else wants to take over. I am not a go programmer, but I do use barnard almost daily. So if you have some changes, please create a pull request.
