@@ -1,8 +1,11 @@
 # Barnard
 
-**0xAF**: I've added Voice Start/Stop events, to be passed to the notify.sh script.  
+
+**0xAF**: note begin.  
+I've added Voice Start/Stop events, to be passed to the notify.sh script.  
 I need these events, so I can start and stop transmitting (PTT button) on my HAN radio.  
 I'm in no way a GO developer, so it is what it is.
+**0xAF**: note end.  
 
 
 The original maintainer has become unresponsive. There are pull requests and other interactions that have not been responded to in a few years. So at this point, the worst has to be assumed, that's right, real life got in the way of project development!
