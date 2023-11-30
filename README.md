@@ -4,7 +4,7 @@
 **0xAF**: note begin.  
 I've added Voice Start/Stop events, to be passed to the notify.sh script.  
 I need these events, so I can start and stop transmitting (PTT button) on my HAN radio.  
-I'm in no way a GO developer, so it is what it is.
+I'm in no way a GO developer, so it is what it is.  
 **0xAF**: note end.  
 
 
