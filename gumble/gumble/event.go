@@ -23,6 +23,7 @@ type EventListener interface {
 	OnBanList(e *BanListEvent)
 	OnContextActionChange(e *ContextActionChangeEvent)
 	OnServerConfig(e *ServerConfigEvent)
+	OnVoice(e *VoiceEvent)
 }
 
 // ConnectEvent is the event that is passed to EventListener.OnConnect.
@@ -219,4 +220,10 @@ type ServerConfigEvent struct {
 	SuggestVersion    *Version
 	SuggestPositional *bool
 	SuggestPushToTalk *bool
+}
+
+type VoiceEvent struct {
+	Client *Client
+	User   *User
+	Active bool
 }

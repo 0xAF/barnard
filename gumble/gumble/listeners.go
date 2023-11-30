@@ -151,3 +151,13 @@ func (e *Listeners) onServerConfig(event *ServerConfigEvent) {
 	}
 	event.Client.volatile.Unlock()
 }
+
+func (e *Listeners) onVoice(event *VoiceEvent) {
+	event.Client.volatile.Lock()
+	for item := e.head; item != nil; item = item.next {
+		event.Client.volatile.Unlock()
+		item.listener.OnVoice(event)
+		event.Client.volatile.Lock()
+	}
+	event.Client.volatile.Unlock()
+}

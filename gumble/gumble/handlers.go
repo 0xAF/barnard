@@ -76,6 +76,9 @@ func (c *Client) handleVersion(buffer []byte) error {
 	return nil
 }
 
+var last_time time.Time
+var stop_timer *time.Timer
+
 func (c *Client) handleUDPTunnel(buffer []byte) error {
 	if len(buffer) < 1 {
 		return errInvalidProtobuf
@@ -120,6 +123,30 @@ func (c *Client) handleUDPTunnel(buffer []byte) error {
 	}
 	buffer = buffer[n:]
 
+	vevent := VoiceEvent{
+		Client: c,
+		User:   user,
+	}
+	if time.Since(last_time).Milliseconds() > 200 {
+		// fmt.Println()
+		// fmt.Printf("USER: %+v\n\n", user)
+		// fmt.Printf("Client: %+v\n\n", user.client)
+		// fmt.Printf("C: %+v\n\n", c)
+		// fmt.Printf("Config: %+v\n\n", c.Config)
+		vevent.Active = true
+		c.Config.Listeners.onVoice(&vevent)
+		// fmt.Println(user.Name, "Start of transmission")
+		stop_timer = time.NewTimer(200 * time.Millisecond)
+	}
+	last_time = time.Now()
+	stop_timer.Reset(200 * time.Millisecond)
+	go func() {
+		<-stop_timer.C
+		vevent.Active = false
+		c.Config.Listeners.onVoice(&vevent)
+		// fmt.Printf("Timer expired, voice stopped")
+	}()
+
 	// Length
 	length, n := varint.Decode(buffer)
 	if n <= 0 {
@@ -131,6 +158,13 @@ func (c *Client) handleUDPTunnel(buffer []byte) error {
 	if audioLength > len(buffer) {
 		return errInvalidProtobuf
 	}
+	// fmt.Printf("seq: %d, len: %d\n", seq, length)
+	// fmt.Printf("len: %d\n", length)
+	// if length&0x2000 != 0 {
+	// 	vevent.Active = false
+	// 	c.Config.Listeners.onVoice(&vevent)
+	// 	// fmt.Println(user.Name, "End of transmission.")
+	// }
 
 	pcm, err := decoder.Decode(buffer[:audioLength], AudioMaximumFrameSize)
 	if err != nil {
@@ -156,6 +190,7 @@ func (c *Client) handleUDPTunnel(buffer []byte) error {
 		event.HasPosition = true
 	}
 
+	// fmt.Println("Incomming audio")
 	c.volatile.Lock()
 	for item := c.Config.AudioListeners.head; item != nil; item = item.next {
 		c.volatile.Unlock()

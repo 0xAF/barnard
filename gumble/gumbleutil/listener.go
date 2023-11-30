@@ -18,6 +18,7 @@ type Listener struct {
 	BanList             func(e *gumble.BanListEvent)
 	ContextActionChange func(e *gumble.ContextActionChangeEvent)
 	ServerConfig        func(e *gumble.ServerConfigEvent)
+	Voice               func(e *gumble.VoiceEvent)
 }
 
 var _ gumble.EventListener = (*Listener)(nil)
@@ -96,5 +97,12 @@ func (l Listener) OnContextActionChange(e *gumble.ContextActionChangeEvent) {
 func (l Listener) OnServerConfig(e *gumble.ServerConfigEvent) {
 	if l.ServerConfig != nil {
 		l.ServerConfig(e)
+	}
+}
+
+// voice
+func (l Listener) OnVoice(e *gumble.VoiceEvent) {
+	if l.Voice != nil {
+		l.Voice(e)
 	}
 }

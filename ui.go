@@ -81,8 +81,10 @@ func (b *Barnard) AddOutputMessage(sender *gumble.User, message string) {
 	}
 }
 
-func (b *Barnard) AddOutputPrivateMessage(source *gumble.User, dest *gumble.User, message string) {
-	b.AddOutputLine(fmt.Sprintf("pm/%s/%s: %s", source.Name, dest.Name, strings.TrimSpace(esc(message))))
+//func (b *Barnard) AddOutputPrivateMessage(source *gumble.User, dest *gumble.User, message string) {
+func (b *Barnard) AddOutputPrivateMessage(source string, dest *gumble.User, message string) {
+	//b.AddOutputLine(fmt.Sprintf("pm/%s/%s: %s", source.Name, dest.Name, strings.TrimSpace(esc(message))))
+	b.AddOutputLine(fmt.Sprintf("pm/%s/%s: %s", source, dest.Name, strings.TrimSpace(esc(message))))
 }
 
 func (b *Barnard) OnTimestampToggle(ui *uiterm.Ui, key uiterm.Key) {
@@ -212,7 +214,8 @@ func (b *Barnard) OnTextInput(ui *uiterm.Ui, textbox *uiterm.Textbox, text strin
 	if b.Client != nil && b.Client.Self != nil {
 		if b.selectedUser != nil {
 			b.selectedUser.Send(text)
-			b.AddOutputPrivateMessage(b.Client.Self, b.selectedUser, text)
+			//b.AddOutputPrivateMessage(b.Client.Self, b.selectedUser, text)
+			b.AddOutputPrivateMessage(b.Client.Self.Name, b.selectedUser, text)
 		} else {
 			b.Client.Self.Channel.Send(text, false)
 			b.AddOutputMessage(b.Client.Self, text)

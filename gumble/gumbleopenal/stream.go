@@ -109,6 +109,7 @@ func (s *Stream) Destroy() {
 }
 
 func (s *Stream) StartSource(inputDevice *string) error {
+	// fmt.Println("start source")
 	if s.sourceStop != nil {
 		return ErrState
 	}

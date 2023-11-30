@@ -122,8 +122,13 @@ func (b *Barnard) OnTextMessage(e *gumble.TextMessageEvent) {
 		b.Notify("msg", e.Sender.Name, e.Message)
 		b.AddOutputMessage(e.Sender, e.Message)
 	} else {
-		b.Notify("pm", e.Sender.Name, e.Message)
-		b.AddOutputPrivateMessage(e.Sender, b.Client.Self, e.Message)
+		if e.Sender != nil {
+			b.Notify("pm", e.Sender.Name, e.Message)
+			b.AddOutputPrivateMessage(e.Sender.Name, b.Client.Self, e.Message)
+		} else {
+			b.Notify("pm", "[server]", e.Message)
+			b.AddOutputPrivateMessage("[server]", b.Client.Self, e.Message)
+		}
 	}
 }
 
@@ -204,4 +209,14 @@ func (b *Barnard) OnContextActionChange(e *gumble.ContextActionChangeEvent) {
 }
 
 func (b *Barnard) OnServerConfig(e *gumble.ServerConfigEvent) {
+}
+
+func (b *Barnard) OnVoice(e *gumble.VoiceEvent) {
+	if e.Active {
+		b.AddOutputMessage(e.User, "speaking")
+		b.Notify("voice", "1", e.User.Name)
+	} else {
+		b.AddOutputMessage(e.User, "shut up")
+		b.Notify("voice", "0", e.User.Name)
+	}
 }

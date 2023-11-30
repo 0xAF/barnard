@@ -21,13 +21,31 @@
 # 02110-1301, USA.
 #
 #--code--
-                                                                                                                                                                
+
 # 1 is off, 0 is on
 notify=0
 sound=0
 
 # Select notify type, notify-send or fenrir
-notifyType="fenrir"
+#notifyType="fenrir"
+notifyType="notify-send"
+# get the right cm108 tool from https://github.com/twilly/cm108
+cm108="cm108_ptt"
+
+voice() {
+	hidraw_dev=`$cm108 -p | grep "All-In-One-Cable" | grep -oP "/dev/hidraw\d+"`
+
+	case "${2}" in
+	0)
+		[[ $notify ]] && notify "${3} shut up"
+		$cm108 -H $hidraw_dev -P 2 -L 1
+	;;
+	1)
+		[[ $notify ]] && notify "${3} is talking"
+		$cm108 -H $hidraw_dev -P 3 -L 1
+	;;
+	esac
+}
 
 connect() {
     [[ $sound ]] && play -n synth .05 pl 1050 pl 1100 remix - pad 0 .05 repeat
@@ -87,6 +105,7 @@ pm() {
 }
 
 if is_function "$1" ; then
+    #echo $@ >> /tmp/barnard.log
     eval "$1" "$1" "$2" "$3" &> /dev/null
 else
     echo "The given barnard event has not yet been added."
